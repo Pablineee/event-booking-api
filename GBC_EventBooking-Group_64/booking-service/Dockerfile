@@ -1,0 +1,28 @@
+#----------------
+# BUILD STAGE
+#----------------
+
+FROM gradle:7.5.1-jdk17-alpine AS builder
+
+COPY --chown=gradle:gradle . /home/gradle/src
+
+WORKDIR /home/gradle/src
+
+RUN gradle build -x test
+
+#----------------
+# PACKAGE STAGE
+#----------------
+
+FROM openjdk:17-jdk-slim
+
+RUN mkdir /app
+
+COPY --from=builder /home/gradle/src/build/libs/*.jar /app/booking-service.jar
+
+ENV MONGO_DB_USERNAME=admin \
+    MONGO_DB_PWD=password
+
+EXPOSE 9002
+
+ENTRYPOINT ["java", "-jar",  "/app/booking-service.jar"]
