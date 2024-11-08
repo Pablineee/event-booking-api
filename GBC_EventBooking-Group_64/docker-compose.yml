@@ -145,6 +145,8 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.ca
       - PGADMIN_DEFAULT_PASSWORD=password
+    volumes:
+      - ./init/postgres/server/servers.json:/pgadmin4/servers.json
     networks:
       - spring
 

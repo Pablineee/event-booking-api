@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "GBC Event Booking - Group 64",
+      "Group": "Servers",
+      "Host": "postgres-event-booking",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "admin",
+      "Password": "password",
+      "SSLMode": "prefer"
+    }
+  }
+}
