@@ -133,14 +133,15 @@ services:
       - ./data/postgres:/var/lib/postgresql/data
       - ./init/postgres/room/init.sql:/docker-entrypoint-initdb.d/room-init.sql
       - ./init/postgres/user/init.sql:/docker-entrypoint-initdb.d/user-init.sql
+      - ./init/postgres/approval/init.sql:/docker-entrypoint-initdb.d/approval-init.sql
     networks:
       - spring
 
-  pgadmin:
+  pgadmin-event-booking:
     image: dpage/pgadmin4
     ports:
       - "8889:80"
-    container_name: pgadmin
+    container_name: pgadmin-event-booking
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.ca
       - PGADMIN_DEFAULT_PASSWORD=password
