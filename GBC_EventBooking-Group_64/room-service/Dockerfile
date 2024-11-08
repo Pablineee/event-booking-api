@@ -20,9 +20,6 @@ RUN mkdir /app
 
 COPY --from=builder /home/gradle/src/build/libs/*.jar /app/room-service.jar
 
-ENV DATABASE_USERNAME=admin \
-    DATABASE_PASSWORD=password
-
 EXPOSE 9001
 
 ENTRYPOINT ["java", "-jar",  "/app/room-service.jar"]

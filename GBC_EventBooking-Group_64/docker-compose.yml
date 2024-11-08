@@ -1,3 +1,11 @@
+########################################################################################
+#                                                                                      #
+#    Run the following command to initialize the containerized Docker network          #
+#                                                                                      #
+#   docker-compose -p gbc_eventbooking-group_64 -f docker-compose.yml up -d --build    #
+#                                                                                      #
+########################################################################################
+
 version: '3.9'
 
 services:
@@ -11,8 +19,11 @@ services:
     container_name: room-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      DATABASE_URL: jdbc:postgresql://postgres-event-booking:5432/room-service
+      DATABASE_USERNAME: admin
+      DATABASE_PASSWORD: password
     depends_on:
-      - postgres
+      - postgres-event-booking
     networks:
       - spring
 
@@ -27,7 +38,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - mongodb
+      - mongodb-event-booking
     networks:
       - spring
 
@@ -41,8 +52,11 @@ services:
     container_name: user-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      DATABASE_URL: jdbc:postgresql://postgres-event-booking:5432/user-service
+      DATABASE_USERNAME: admin
+      DATABASE_PASSWORD: password
     depends_on:
-      - postgres
+      - postgres-event-booking
     networks:
       - spring
 
@@ -57,7 +71,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - mongodb
+      - mongodb-event-booking
     networks:
       - spring
 
@@ -71,12 +85,15 @@ services:
     container_name: approval-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      DATABASE_URL: jdbc:postgresql://postgres-event-booking:5432/approval-service
+      DATABASE_USERNAME: admin
+      DATABASE_PASSWORD: password
     depends_on:
-      - mongodb # or postgres
+      - postgres-event-booking
     networks:
       - spring
 
-  mongodb:
+  mongodb-event-booking:
     image: mongo
     ports:
       - "27019:27017"
@@ -86,29 +103,29 @@ services:
     volumes:
       - ./data/mongo:/data/db
       - ./init/mongo/docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
-    container_name: mongodb
+    container_name: mongodb-event-booking
     networks:
       - spring
 
-  mongo-express:
+  mongo-express-event-booking:
     image: mongo-express
     ports:
       - "8081:8081"
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
       - ME_CONFIG_MONGODB_ADMINPASSWORD=password
-      - ME_CONFIG_MONGODB_SERVER=mongodb
-    container_name: mongo-express
+      - ME_CONFIG_MONGODB_SERVER=mongodb-event-booking
+    container_name: mongo-express-event-booking
     depends_on:
-      - mongodb
+      - mongodb-event-booking
     networks:
       - spring
 
-  postgres:
+  postgres-event-booking:
     image: postgres
     ports:
       - "5432:5432"
-    container_name: postgres
+    container_name: postgres-event-booking
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password

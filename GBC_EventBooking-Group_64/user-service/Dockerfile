@@ -20,9 +20,6 @@ RUN mkdir /app
 
 COPY --from=builder /home/gradle/src/build/libs/*.jar /app/user-service.jar
 
-ENV DATABASE_USERNAME=admin \
-    DATABASE_PASSWORD=password
-
 EXPOSE 9003
 
 ENTRYPOINT ["java", "-jar",  "/app/user-service.jar"]
