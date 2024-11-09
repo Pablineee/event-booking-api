@@ -12,7 +12,7 @@ services:
   room-service:
     image: room-service
     ports:
-      - "9001:9001"
+      - "9001:8080"
     build:
       context: ./room-service
       dockerfile: ./Dockerfile
@@ -31,7 +31,7 @@ services:
   booking-service:
     image: booking-service
     ports:
-      - "9002:9002"
+      - "9002:8080"
     build:
       context: ./booking-service
       dockerfile: ./Dockerfile
@@ -46,7 +46,7 @@ services:
   user-service:
     image: user-service
     ports:
-      - "9003:9003"
+      - "9003:8080"
     build:
       context: ./user-service
       dockerfile: ./Dockerfile
@@ -65,7 +65,7 @@ services:
   event-service:
     image: event-service
     ports:
-      - "9004:9004"
+      - "9004:8080"
     build:
       context: ./event-service
       dockerfile: ./Dockerfile
@@ -80,7 +80,7 @@ services:
   approval-service:
     image: approval-service
     ports:
-      - "9005:9005"
+      - "9005:8080"
     build:
       context: ./approval-service
       dockerfile: ./Dockerfile
