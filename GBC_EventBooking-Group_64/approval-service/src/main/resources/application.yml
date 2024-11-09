@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres-event-booking:5432/approval-service
+    username: admin
+    password: password
+  flyway:
+    enabled: true
+    locations: classpath:db/migration

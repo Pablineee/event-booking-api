@@ -1,4 +1,10 @@
 package ca.gbc.approvalservice.dto;
 
-public class ApprovalRequest {
+import lombok.Builder;
+
+@Builder
+public record ApprovalRequest(
+        Long staffId,
+        String status
+) {
 }
