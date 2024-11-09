@@ -1,1 +1,7 @@
 rootProject.name = 'GBC_EventBooking-Group_64'
+
+include 'room-service'
+include 'booking-service'
+include 'user-service'
+include 'event-service'
+include 'approval-service'
