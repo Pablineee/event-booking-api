@@ -1,6 +1,6 @@
 # GBC Event Booking - Group 64
 
-1. **Clone the repository**:
+1. **Clone the repository**
     ```bash
     git clone https://github.com/Pablineee/GBC_EventBooking-Group_64.git
     cd GBC_EventBooking-Group_64/GBC_EventBooking-Group_64
