@@ -11,6 +11,9 @@
    ```bash
    docker-compose -p gbc_eventbooking-group_64 -f docker-compose.yml up -d --build
 
+4. ***When working on microservice, be sure to switch to its respective branch***
+   ```bash
+   git checkout <microservice>
 
 ## Endpoints
 #### room-service - **http://localhost:9001/api/room**
