@@ -16,6 +16,7 @@ public class Event {
     @Id
     private String id;
     private String eventName;
+    private String bookingId;
     private String organizerId;
     private String eventType;
     private Integer expectedAttendees;

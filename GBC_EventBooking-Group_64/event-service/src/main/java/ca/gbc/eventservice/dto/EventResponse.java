@@ -6,6 +6,7 @@ import lombok.Builder;
 public record EventResponse(
         String id,
         String eventName,
+        String bookingId,
         String organizerId,
         String eventType,
         Integer expectedAttendees,
