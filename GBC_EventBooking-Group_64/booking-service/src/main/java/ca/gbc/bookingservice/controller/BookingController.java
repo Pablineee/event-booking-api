@@ -1,5 +1,6 @@
 package ca.gbc.bookingservice.controller;
 
+import ca.gbc.bookingservice.client.RoomClient;
 import ca.gbc.bookingservice.dto.BookingRequest;
 import ca.gbc.bookingservice.dto.BookingResponse;
 import ca.gbc.bookingservice.service.BookingService;
@@ -18,6 +19,7 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final RoomClient roomClient;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -26,14 +28,17 @@ public class BookingController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createBooking(@RequestBody BookingRequest bookingRequest) {
-        try {
-            BookingResponse response = bookingService.createBooking(bookingRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (IllegalStateException e) {
-            return null;
+        boolean isRoomAvailable = roomClient.roomAvailable(Long.parseLong(bookingRequest.roomId()));
+
+        if (!isRoomAvailable) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Room is not available for booking");
         }
+
+        // Execute booking creation
+        BookingResponse bookingResponse = bookingService.createBooking(bookingRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookingResponse);
     }
 
     @PutMapping("/{bookingId}")

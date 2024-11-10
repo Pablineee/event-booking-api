@@ -19,19 +19,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final MongoTemplate mongoTemplate;
-    private final RoomClient roomClient;
-
     @Autowired
-    public BookingServiceImpl(BookingRepository bookingRepository, MongoTemplate mongoTemplate, RoomClient roomClient) {
-        this.bookingRepository = bookingRepository;
-        this.mongoTemplate = mongoTemplate;
-        this.roomClient = roomClient;
-    }
+    private RoomClient roomClient;
 
     @Override
     public BookingResponse createBooking(BookingRequest bookingRequest) {
@@ -39,32 +33,31 @@ public class BookingServiceImpl implements BookingService {
         boolean isRoomAvailable = roomClient.roomAvailable(Long.parseLong(bookingRequest.roomId()));
 
         if (!isRoomAvailable) {
-            throw new IllegalStateException("The room is not available for booking.");
+            throw new IllegalStateException("Room is not available for booking.");
         }
 
-        Booking booking = new Booking();
-        booking.setRoomId(bookingRequest.roomId());
-        booking.setUserId(bookingRequest.userId());
-        booking.setDate(bookingRequest.date());
-        booking.setStartTime(bookingRequest.startTime());
-        booking.setEndTime(bookingRequest.endTime());
-        booking.setPurpose(bookingRequest.purpose());
+        Booking booking = Booking.builder()
+                .userId(bookingRequest.userId())
+                .roomId(bookingRequest.roomId())
+                .date(bookingRequest.date())
+                .startTime(bookingRequest.startTime())
+                .endTime(bookingRequest.endTime())
+                .purpose(bookingRequest.purpose())
+                .build();
 
-        bookingRepository.save(booking);
+        Booking savedBooking = bookingRepository.save(booking);
 
-        roomClient.makeUnavailable(Long.parseLong(bookingRequest.roomId()));
+        roomClient.makeUnavailable(Long.valueOf(bookingRequest.roomId()));
 
-        log.info("Booking {} has been saved", booking.getId());
-        log.info("Room with ID {} has been made unavailable", booking.getRoomId());
-        return new BookingResponse(
-                booking.getId(),
-                booking.getUserId(),
-                booking.getRoomId(),
-                booking.getDate(),
-                booking.getStartTime(),
-                booking.getEndTime(),
-                booking.getPurpose()
-        );
+        return BookingResponse.builder()
+                .bookingId(savedBooking.getId())
+                .userId(savedBooking.getUserId())
+                .roomId(savedBooking.getRoomId())
+                .date(savedBooking.getDate())
+                .startTime(savedBooking.getStartTime())
+                .endTime(savedBooking.getEndTime())
+                .purpose(savedBooking.getPurpose())
+                .build();
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "room-service", url = "http://room-service:9001/api/room")
+@FeignClient(name = "room-service", url = "http://room-service:8080", path = "api/room/")
 public interface RoomClient {
 
     @GetMapping( "available/{roomId}")
