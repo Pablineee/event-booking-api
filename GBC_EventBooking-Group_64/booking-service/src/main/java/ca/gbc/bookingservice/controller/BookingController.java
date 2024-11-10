@@ -1,5 +1,6 @@
 package ca.gbc.bookingservice.controller;
 
+import ca.gbc.bookingservice.client.RoomClient;
 import ca.gbc.bookingservice.dto.BookingRequest;
 import ca.gbc.bookingservice.dto.BookingResponse;
 import ca.gbc.bookingservice.service.BookingService;
@@ -18,6 +19,7 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final RoomClient roomClient;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -26,18 +28,17 @@ public class BookingController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BookingResponse> createBooking(@RequestBody BookingRequest bookingRequest) {
-        BookingResponse createdBooking = bookingService.createBooking(bookingRequest);
+    public ResponseEntity<?> createBooking(@RequestBody BookingRequest bookingRequest) {
+        boolean isRoomAvailable = roomClient.roomAvailable(Long.parseLong(bookingRequest.roomId()));
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/booking/" + createdBooking.bookingId());
+        if (!isRoomAvailable) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Room is not available for booking");
+        }
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .headers(headers)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(createdBooking);
+        // Execute booking creation
+        BookingResponse bookingResponse = bookingService.createBooking(bookingRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookingResponse);
     }
 
     @PutMapping("/{bookingId}")

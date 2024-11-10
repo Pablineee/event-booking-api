@@ -3,12 +3,14 @@ package ca.gbc.bookingservice.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(value = "room", url = "http://localhost:9001")
+@FeignClient(name = "room-service", url = "http://room-service:8080", path = "api/room/")
 public interface RoomClient {
 
     @GetMapping( "available/{roomId}")
     boolean roomAvailable(@PathVariable Long roomId);
 
-    // Implement post method to set room's 'available' field to 'false'
+    @PostMapping("unavailable/{roomId}")
+    void makeUnavailable(@PathVariable Long roomId);
 }

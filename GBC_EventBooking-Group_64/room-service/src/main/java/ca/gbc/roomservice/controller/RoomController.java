@@ -3,6 +3,7 @@ package ca.gbc.roomservice.controller;
 
 import ca.gbc.roomservice.dto.RoomRequest;
 import ca.gbc.roomservice.dto.RoomResponse;
+import ca.gbc.roomservice.model.Room;
 import ca.gbc.roomservice.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +25,34 @@ public class RoomController {
     @ResponseStatus(HttpStatus.OK)
     public List<RoomResponse> getAllRooms() {
         return roomService.getAllRooms();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{roomId}")
+    public RoomResponse getRoom(@PathVariable String roomId) {
+        return roomService.getRoom(roomId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/unavailable/{roomId}")
+    public void makeRoomUnavailable(@PathVariable String roomId) {
+        RoomResponse roomResponse = roomService.getRoom(roomId);
+        roomService.makeUnavailable(roomId, roomResponse);
+    }
+
+    @GetMapping("/available/{roomId}")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean isRoomAvailable(@PathVariable Long roomId) {
+        RoomResponse roomResponse = roomService.getRoom(String.valueOf(roomId));
+        return roomResponse.available();
+    }
+
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/available/{roomId}")
+    public void makeRoomAvailable(@PathVariable String roomId) {
+        RoomResponse roomResponse = roomService.getRoom(roomId);
+        roomService.makeAvailable(roomId, roomResponse);
     }
 
     @PostMapping
