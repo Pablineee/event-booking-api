@@ -1,4 +1,4 @@
-package ca.gbc.eventserviceservice.client;
+package ca.gbc.eventservice.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -42,7 +42,8 @@ class EventServiceApplicationTests {
                    "eventName" : "Study Hall",
                    "eventType" : "study",
                    "expectedAttendees" : "2",
-                   "organizerId" : "001"
+                   "organizerId" : "001",
+                   "status" : "pending"
                 }
         """;
 
@@ -61,7 +62,8 @@ class EventServiceApplicationTests {
                 .body("id", Matchers.notNullValue())  //  Assert that the returned product has a non-null ID
                 .body("eventName", Matchers.equalTo("Study Hall"))  //  Assert that the product's name matches
                 .body("eventType", Matchers.equalTo("study"))  //  Assert that the description matches
-                .body("organizerId", Matchers.equalTo(001));  //  Assert that the price is 2000
+                .body("organizerId", Matchers.equalTo("001"))  //  Assert that the price is 2000
+                .body("status", Matchers.equalTo("pending"));
 
 
     }
