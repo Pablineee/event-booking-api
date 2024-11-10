@@ -59,12 +59,54 @@ class EventServiceApplicationTests {
                 .then()
                 .log().all()  //  Log the response details
                 .statusCode(201)  // Assert that the HTTP status code is 201 Created
-                .body("id", Matchers.notNullValue())  //  Assert that the returned product has a non-null ID
-                .body("eventName", Matchers.equalTo("Study Hall"))  //  Assert that the product's name matches
-                .body("eventType", Matchers.equalTo("study"))  //  Assert that the description matches
-                .body("organizerId", Matchers.equalTo("001"))  //  Assert that the price is 2000
-                .body("status", Matchers.equalTo("pending"));
+                .body("id", Matchers.notNullValue())  //  Assert that the returned event has a non-null ID
+                .body("eventName", Matchers.equalTo("Study Hall"))  //  Assert that the event's name matches
+                .body("eventType", Matchers.equalTo("study"))  //  Assert that the event's type matches
+                .body("organizerId", Matchers.equalTo("001"))  //  Assert that the organizer's id matches
+                .body("status", Matchers.equalTo("pending")); //  Assert that the status matches
 
+
+    }
+
+    @Test
+    void getAllProductsTest(){
+
+        String requestBody = """
+                {
+                   "eventName" : "Study Hall",
+                   "eventType" : "study",
+                   "expectedAttendees" : "2",
+                   "organizerId" : "001",
+                   "status" : "pending"
+                }
+                """;
+        // BDD - Behavioural Driven Development (Given, When, Then)
+        RestAssured.given()
+                .contentType("application/json")
+                .body(requestBody)
+                .when()
+                .post("/api/event")
+                .then()
+                .log().all()
+                .statusCode(201)
+                .body("id", Matchers.notNullValue())  //  Assert that the returned event has a non-null ID
+                .body("eventName", Matchers.equalTo("Study Hall"))  //  Assert that the event's name matches
+                .body("eventType", Matchers.equalTo("study"))  //  Assert that the event's type matches
+                .body("organizerId", Matchers.equalTo("001"))  //  Assert that the organizer's id matches
+                .body("status", Matchers.equalTo("pending")); //  Assert that the status matches
+
+        RestAssured.given()
+                .contentType("application/json")
+                .when()
+                .get("/api/event")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("size()", Matchers.greaterThan(0))
+                .body("[0].eventName", Matchers.equalTo("Study Hall"))
+                .body("[0].eventType", Matchers.equalTo("study"))
+                .body("[0].organizerId", Matchers.equalTo("001"))
+                .body("[0].status", Matchers.equalTo("pending"));
 
     }
 
