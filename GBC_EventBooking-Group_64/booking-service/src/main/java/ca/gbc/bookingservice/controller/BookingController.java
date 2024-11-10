@@ -27,17 +27,13 @@ public class BookingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BookingResponse> createBooking(@RequestBody BookingRequest bookingRequest) {
-        BookingResponse createdBooking = bookingService.createBooking(bookingRequest);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/booking/" + createdBooking.bookingId());
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .headers(headers)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(createdBooking);
+    public ResponseEntity<?> createBooking(@RequestBody BookingRequest bookingRequest) {
+        try {
+            BookingResponse response = bookingService.createBooking(bookingRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (IllegalStateException e) {
+            return null;
+        }
     }
 
     @PutMapping("/{bookingId}")

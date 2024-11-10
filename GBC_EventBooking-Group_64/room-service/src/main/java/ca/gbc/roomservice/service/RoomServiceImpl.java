@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,6 +32,21 @@ public class RoomServiceImpl implements RoomService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public RoomResponse getRoom(String roomId) {
+        Room room = roomRepository.findById(Long.parseLong(roomId))
+                .orElseThrow(() -> new RuntimeException("Room with ID " + roomId + " not found"));
+
+        return RoomResponse.builder()
+                .id(room.getId())
+                .roomName(room.getRoomName())
+                .capacity(room.getCapacity())
+                .features(room.getFeatures())
+                .available(room.getAvailable())
+                .build();
+    }
+
 
     @Override
     public RoomResponse createRoom(RoomRequest roomRequest) {
@@ -64,6 +80,26 @@ public class RoomServiceImpl implements RoomService {
 
         Room updatedRoom = roomRepository.save(room);
         return String.valueOf(updatedRoom.getId());
+    }
+
+    @Override
+    public void makeUnavailable(String roomId, RoomResponse roomResponse) {
+        Room room = roomRepository.findById(Long.parseLong(roomId))
+                .orElseThrow(() -> new RuntimeException("Room with ID " + roomId + " not found"));
+
+        room.setAvailable(false);
+
+        roomRepository.save(room);
+    }
+
+    @Override
+    public void makeAvailable(String roomId, RoomResponse roomResponse) {
+        Room room = roomRepository.findById(Long.parseLong(roomId))
+                .orElseThrow(() -> new RuntimeException("Room with ID " + roomId + " not found"));
+
+        room.setAvailable(true);
+
+        roomRepository.save(room);
     }
 
     @Override
