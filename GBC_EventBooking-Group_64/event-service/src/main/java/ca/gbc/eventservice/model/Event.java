@@ -19,4 +19,5 @@ public class Event {
     private String organizerId;
     private String eventType;
     private Integer expectedAttendees;
+    private String status;
 }
