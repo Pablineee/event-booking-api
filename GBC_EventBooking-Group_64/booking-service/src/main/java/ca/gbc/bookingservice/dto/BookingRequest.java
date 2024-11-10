@@ -6,6 +6,7 @@ import lombok.Builder;
 public record BookingRequest(
         String userId,
         String roomId,
+        String date,
         String startTime,
         String endTime,
         String purpose

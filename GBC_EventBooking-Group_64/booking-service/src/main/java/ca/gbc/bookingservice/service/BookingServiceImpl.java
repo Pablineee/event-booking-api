@@ -28,6 +28,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = Booking.builder()
                 .userId(bookingRequest.userId())
                 .roomId(bookingRequest.roomId())
+                .date(bookingRequest.date())
                 .startTime(bookingRequest.startTime())
                 .endTime(bookingRequest.endTime())
                 .purpose(bookingRequest.purpose())
@@ -41,6 +42,7 @@ public class BookingServiceImpl implements BookingService {
                 booking.getId(),
                 booking.getUserId(),
                 booking.getRoomId(),
+                booking.getDate(),
                 booking.getStartTime(),
                 booking.getEndTime(),
                 booking.getPurpose()
@@ -56,6 +58,7 @@ public class BookingServiceImpl implements BookingService {
                         .bookingId(booking.getId())
                         .userId(booking.getUserId())
                         .roomId(booking.getRoomId())
+                        .date(booking.getDate())
                         .startTime(booking.getStartTime())
                         .endTime(booking.getEndTime())
                         .purpose(booking.getPurpose())
@@ -77,6 +80,7 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setUserId(bookingRequest.userId());
         booking.setRoomId(bookingRequest.roomId());
+        booking.setDate(bookingRequest.date());
         booking.setStartTime(bookingRequest.startTime());
         booking.setEndTime(bookingRequest.endTime());
         booking.setPurpose(bookingRequest.purpose());
