@@ -1,5 +1,6 @@
 package ca.gbc.eventservice.controller;
 
+import ca.gbc.eventservice.client.UserClient;
 import ca.gbc.eventservice.dto.EventRequest;
 import ca.gbc.eventservice.dto.EventResponse;
 import ca.gbc.eventservice.service.EventService;
