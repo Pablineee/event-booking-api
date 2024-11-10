@@ -20,53 +20,47 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     @Override
     public List<ApprovalResponse> getAllApprovals() {
-//        List<Approval> approvals = approvalRepository.findAll();
-//        return approvals.stream()
-//                .map( approval -> ApprovalResponse.builder()
-//                        .id(approval.getId())
-//                        .approvalName(approval.getApprovalName())
-//                        .features(approval.getFeatures())
-//                        .capacity(approval.getCapacity())
-//                        .available(approval.getAvailable())
-//                        .build())
-//                .collect(Collectors.toList());
-        return null;
+        List<Approval> approvals = approvalRepository.findAll();
+        return approvals.stream()
+                .map( approval -> ApprovalResponse.builder()
+                        .id(approval.getId())
+                        .eventId(approval.getEventId())
+                        .staffId(approval.getStaffId())
+                        .status(approval.getStatus())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
     public ApprovalResponse createApproval(ApprovalRequest approvalRequest) {
-//        Approval approval = Approval.builder()
-//                .approvalName(approvalRequest.approvalName())
-//                .capacity(approvalRequest.capacity())
-//                .features(approvalRequest.features())
-//                .available(approvalRequest.available())
-//                .build();
-//
-//        Approval savedApproval = approvalRepository.save(approval);
-//
-//        return ApprovalResponse.builder()
-//                .id(savedApproval.getId())
-//                .approvalName(savedApproval.getApprovalName())
-//                .capacity(savedApproval.getCapacity())
-//                .features(savedApproval.getFeatures())
-//                .available(savedApproval.getAvailable())
-//                .build();
-        return null;
+        Approval approval = Approval.builder()
+                .eventId(approvalRequest.eventId())
+                .staffId(approvalRequest.staffId())
+                .status(approvalRequest.status())
+                .build();
+
+        Approval savedApproval = approvalRepository.save(approval);
+
+        return ApprovalResponse.builder()
+                .id(savedApproval.getId())
+                .eventId(savedApproval.getEventId())
+                .staffId(savedApproval.getStaffId())
+                .status(savedApproval.getStatus())
+                .build();
     }
 
     @Override
     public String updateApproval(String approvalId, ApprovalRequest approvalRequest) {
-//        Approval approval = approvalRepository.findById(Long.parseLong(approvalId))
-//                .orElseThrow(() -> new RuntimeException("Approval with ID " + approvalId + " not found"));
-//
-//        approval.setApprovalName(approvalRequest.approvalName());
-//        approval.setCapacity(approvalRequest.capacity());
-//        approval.setFeatures(approvalRequest.features());
-//        approval.setAvailable(approvalRequest.available());
-//
-//        Approval updatedApproval = approvalRepository.save(approval);
-//        return String.valueOf(updatedApproval.getId());
-        return null;
+        Approval approval = approvalRepository.findById(Long.parseLong(approvalId))
+                .orElseThrow(() -> new RuntimeException("Approval with ID " + approvalId + " not found"));
+
+        approval.setEventId(approvalRequest.eventId());
+        approval.setStaffId(approvalRequest.staffId());
+        approval.setStatus(approvalRequest.status());
+
+        Approval updatedApproval = approvalRepository.save(approval);
+
+        return String.valueOf(updatedApproval.getId());
     }
 
     @Override
