@@ -30,6 +30,7 @@ public class EventServiceImpl implements EventService {
                 .organizerId(eventRequest.organizerId())
                 .eventType(eventRequest.eventType())
                 .expectedAttendees(eventRequest.expectedAttendees())
+                .status(eventRequest.status())
                 .build();
 
         eventRepository.save(event);
@@ -41,7 +42,8 @@ public class EventServiceImpl implements EventService {
                 event.getEventName(),
                 event.getOrganizerId(),
                 event.getEventType(),
-                event.getExpectedAttendees()
+                event.getExpectedAttendees(),
+                event.getStatus()
         );
     }
 
@@ -56,6 +58,7 @@ public class EventServiceImpl implements EventService {
                         .organizerId(event.getOrganizerId())
                         .eventType(event.getEventType())
                         .expectedAttendees(event.getExpectedAttendees())
+                        .status(event.getStatus())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -76,6 +79,7 @@ public class EventServiceImpl implements EventService {
         event.setOrganizerId(eventRequest.organizerId());
         event.setEventType(eventRequest.eventType());
         event.setExpectedAttendees(eventRequest.expectedAttendees());
+        event.setStatus(eventRequest.status());
 
         eventRepository.save(event);
 

@@ -7,6 +7,7 @@ public record EventRequest(
         String eventName,
         String organizerId,
         String eventType,
-        Integer expectedAttendees
+        Integer expectedAttendees,
+        String status
 ) {
 }
