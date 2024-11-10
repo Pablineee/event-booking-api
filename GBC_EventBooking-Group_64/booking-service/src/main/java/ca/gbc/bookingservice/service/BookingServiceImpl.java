@@ -1,11 +1,14 @@
 package ca.gbc.bookingservice.service;
 
+import ca.gbc.bookingservice.client.RoomClient;
 import ca.gbc.bookingservice.dto.BookingRequest;
 import ca.gbc.bookingservice.dto.BookingResponse;
 import ca.gbc.bookingservice.model.Booking;
 import ca.gbc.bookingservice.repository.BookingRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -21,30 +24,40 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final MongoTemplate mongoTemplate;
+    @Autowired
+    private RoomClient roomClient;
 
     @Override
     public BookingResponse createBooking(BookingRequest bookingRequest) {
 
+        boolean isRoomAvailable = roomClient.roomAvailable(Long.parseLong(bookingRequest.roomId()));
+
+        if (!isRoomAvailable) {
+            throw new IllegalStateException("Room is not available for booking.");
+        }
+
         Booking booking = Booking.builder()
                 .userId(bookingRequest.userId())
                 .roomId(bookingRequest.roomId())
+                .date(bookingRequest.date())
                 .startTime(bookingRequest.startTime())
                 .endTime(bookingRequest.endTime())
                 .purpose(bookingRequest.purpose())
                 .build();
 
-        bookingRepository.save(booking);
+        Booking savedBooking = bookingRepository.save(booking);
 
-        log.info("Booking {} has been saved", booking.getId());
+        roomClient.makeUnavailable(Long.valueOf(bookingRequest.roomId()));
 
-        return new BookingResponse(
-                booking.getId(),
-                booking.getUserId(),
-                booking.getRoomId(),
-                booking.getStartTime(),
-                booking.getEndTime(),
-                booking.getPurpose()
-        );
+        return BookingResponse.builder()
+                .bookingId(savedBooking.getId())
+                .userId(savedBooking.getUserId())
+                .roomId(savedBooking.getRoomId())
+                .date(savedBooking.getDate())
+                .startTime(savedBooking.getStartTime())
+                .endTime(savedBooking.getEndTime())
+                .purpose(savedBooking.getPurpose())
+                .build();
     }
 
     @Override
@@ -56,6 +69,7 @@ public class BookingServiceImpl implements BookingService {
                         .bookingId(booking.getId())
                         .userId(booking.getUserId())
                         .roomId(booking.getRoomId())
+                        .date(booking.getDate())
                         .startTime(booking.getStartTime())
                         .endTime(booking.getEndTime())
                         .purpose(booking.getPurpose())
@@ -77,6 +91,7 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setUserId(bookingRequest.userId());
         booking.setRoomId(bookingRequest.roomId());
+        booking.setDate(bookingRequest.date());
         booking.setStartTime(bookingRequest.startTime());
         booking.setEndTime(bookingRequest.endTime());
         booking.setPurpose(bookingRequest.purpose());

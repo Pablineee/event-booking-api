@@ -14,6 +14,7 @@ public class Approval {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String eventId;
     private Long staffId;
     private String status;
 

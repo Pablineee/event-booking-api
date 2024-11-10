@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record ApprovalRequest(
+        String eventId,
         Long staffId,
         String status
 ) {
