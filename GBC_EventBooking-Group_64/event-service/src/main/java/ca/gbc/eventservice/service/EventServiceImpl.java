@@ -35,6 +35,7 @@ public class EventServiceImpl implements EventService {
 
         Event event = Event.builder()
                 .eventName(eventRequest.eventName())
+                .bookingId(eventRequest.bookingId())
                 .organizerId(eventRequest.organizerId())
                 .eventType(eventRequest.eventType())
                 .expectedAttendees(eventRequest.expectedAttendees())
@@ -48,6 +49,7 @@ public class EventServiceImpl implements EventService {
         return new EventResponse(
                 event.getId(),
                 event.getEventName(),
+                event.getBookingId(),
                 event.getOrganizerId(),
                 event.getEventType(),
                 event.getExpectedAttendees(),
@@ -63,6 +65,7 @@ public class EventServiceImpl implements EventService {
                 .map(event -> EventResponse.builder()
                         .id(event.getId())
                         .eventName(event.getEventName())
+                        .bookingId(event.getBookingId())
                         .organizerId(event.getOrganizerId())
                         .eventType(event.getEventType())
                         .expectedAttendees(event.getExpectedAttendees())
@@ -84,6 +87,7 @@ public class EventServiceImpl implements EventService {
         }
 
         event.setEventName(eventRequest.eventName());
+        event.setBookingId(eventRequest.bookingId());
         event.setOrganizerId(eventRequest.organizerId());
         event.setEventType(eventRequest.eventType());
         event.setExpectedAttendees(eventRequest.expectedAttendees());
