@@ -1,14 +1,12 @@
-package ca.gbc.eventserviceservice.client;
+package ca.gbc.eventservice.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-@FeignClient(value = "user", url = "${user.service.url}")
+@FeignClient(name = "user-service", url = "http://user-service:8080", path = "api/user/")
 public interface UserClient {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user")
-    boolean isStudent(@RequestParam String userId);
+    @GetMapping( "is-student/{userId}")
+    boolean isStudent(@PathVariable Long userId);
 
 }

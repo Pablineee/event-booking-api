@@ -4,7 +4,7 @@ import ca.gbc.eventservice.dto.EventRequest;
 import ca.gbc.eventservice.dto.EventResponse;
 import ca.gbc.eventservice.model.Event;
 import ca.gbc.eventservice.repository.EventRepository;
-import ca.gbc.eventserviceservice.client.UserClient;
+import ca.gbc.eventservice.client.UserClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -27,10 +27,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventResponse createEvent(EventRequest eventRequest) {
 
-        var isUserAStudent = userClient.isStudent(eventRequest.userId());
+        boolean userIsStudent = userClient.isStudent(Long.parseLong(eventRequest.organizerId()));
 
-        if(isUserAStudent && expectedAttendees() > 10){
-            throw new RuntimeException("Students may not create an event with more than 10 attendees!");
+        if(userIsStudent && eventRequest.expectedAttendees() > 10){
+            throw new RuntimeException("Students may not create an event with more than 10 attendees.");
         }
 
         Event event = Event.builder()

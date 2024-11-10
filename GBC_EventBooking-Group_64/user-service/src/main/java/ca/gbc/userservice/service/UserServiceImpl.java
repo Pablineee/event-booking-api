@@ -32,6 +32,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponse getUser(String userId) {
+        User user = userRepository.findById(Long.parseLong(userId))
+                .orElseThrow(() -> new RuntimeException("User with ID " + userId + " not found"));
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .userType(user.getUserType())
+                .build();
+    }
+
+    @Override
+    public boolean isStudent(Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> "student".equalsIgnoreCase(user.getRole()))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
     public UserResponse createUser(UserRequest userRequest) {
         User user = User.builder()
                 .name(userRequest.name())

@@ -4,6 +4,7 @@ import ca.gbc.userservice.dto.UserRequest;
 import ca.gbc.userservice.dto.UserResponse;
 import ca.gbc.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +23,17 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public List<UserResponse> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{userId}")
+    public UserResponse getUser(@PathVariable String userId) {
+        return userService.getUser(userId);
+    }
+
+    @GetMapping("/is-student/{userId}")
+    public boolean isStudent(@PathVariable Long userId) {
+        return userService.isStudent(userId);
     }
 
     @PostMapping
