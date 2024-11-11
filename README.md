@@ -1,5 +1,9 @@
 # GBC Event Booking - Group 64
 
+# Simon Kriksciunas - 100912566
+# Ibrahim Abdillahi - 1014318885
+# Pablo Arango Gomez - ADD YOUR STUDENT #
+
 1. **Clone the repository**
     ```bash
     git clone https://github.com/Pablineee/GBC_EventBooking-Group_64.git
