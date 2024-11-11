@@ -34,7 +34,7 @@ class BookingServiceApplicationTests {
     }
 
     @Test
-    void createProductTest(){
+    void createBookingTest(){
 
         String requestBody = """
                 {
@@ -45,6 +45,9 @@ class BookingServiceApplicationTests {
                    "purpose" : "study"
                 }
         """;
+
+        // Mock a call to inventory-service
+        RoomClientStub.stubInventoryCall("001", true);
 
         // BDD - Behavioural Driven Development (Given, When, Then)
         // Rest Assured is used to perform HTTP requests and verify responses.
@@ -62,22 +65,27 @@ class BookingServiceApplicationTests {
                 .body("userId", Matchers.equalTo("001"))  //  Assert that the user's id matches
                 .body("roomId", Matchers.equalTo("002"))  //  Assert that the room's id matches
                 .body("startTime", Matchers.equalTo("08:00"))  //  Assert that the startTime is 8:00
-                .body("endTime", Matchers.equalTo("09:00")  //  Assert that the endTime is 9:00
+                .body("endTime", Matchers.equalTo("09:00"))  //  Assert that the endTime is 9:00
                 .body("purpose", Matchers.equalTo("study"));  //  Assert that the purpose matches
     }
 
     @Test
-    void getAllProductsTest(){
+    void getAllBookingsTest(){
 
         String requestBody = """
                 {
                    "userId" : "001",
-                   "roomId" : "002",
+                   "roomId" : "001",
                    "startTime" : "08:00",
                    "endTime" : "09:00",
                    "purpose" : "study"
                 }
                 """;
+
+
+        // Mock a call to inventory-service
+        RoomClientStub.stubInventoryCall("001", true);
+
         // BDD - Behavioural Driven Development (Given, When, Then)
         RestAssured.given()
                 .contentType("application/json")
@@ -89,9 +97,9 @@ class BookingServiceApplicationTests {
                 .statusCode(201)
                 .body("id", Matchers.notNullValue())  //  Assert that the returned booking has a non-null ID
                 .body("userId", Matchers.equalTo("001"))  //  Assert that the user's id matches
-                .body("roomId", Matchers.equalTo("002"))  //  Assert that the room's id matches
+                .body("roomId", Matchers.equalTo("001"))  //  Assert that the room's id matches
                 .body("startTime", Matchers.equalTo("08:00"))  //  Assert that the startTime is 8:00
-                .body("endTime", Matchers.equalTo("09:00")  //  Assert that the endTime is 9:00
+                .body("endTime", Matchers.equalTo("09:00"))  //  Assert that the endTime is 9:00
                 .body("purpose", Matchers.equalTo("study"));  //  Assert that the purpose matches
 
         RestAssured.given()
@@ -103,7 +111,7 @@ class BookingServiceApplicationTests {
                 .statusCode(200)
                 .body("size()", Matchers.greaterThan(0))
                 .body("[0].userId", Matchers.equalTo("001"))
-                .body("[0].roomId", Matchers.equalTo("002"))
+                .body("[0].roomId", Matchers.equalTo("001"))
                 .body("[0].startTime", Matchers.equalTo("08:00"))
                 .body("[0].endTime", Matchers.equalTo("09:00"))
                 .body("[0].purpose", Matchers.equalTo("study"));
