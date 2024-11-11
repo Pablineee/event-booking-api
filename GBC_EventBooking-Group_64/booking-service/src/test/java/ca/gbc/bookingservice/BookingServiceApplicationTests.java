@@ -46,8 +46,8 @@ class BookingServiceApplicationTests {
                 }
         """;
 
-        // Mock a call to inventory-service
-        RoomClientStub.stubInventoryCall("001", true);
+        // Mock a call to room-service
+        RoomClientStub.stubRoomCall("001", true);
 
         // BDD - Behavioural Driven Development (Given, When, Then)
         // Rest Assured is used to perform HTTP requests and verify responses.
@@ -83,8 +83,8 @@ class BookingServiceApplicationTests {
                 """;
 
 
-        // Mock a call to inventory-service
-        RoomClientStub.stubInventoryCall("001", true);
+        // Mock a call to room-service
+        RoomClientStub.stubRoomCall("001", true);
 
         // BDD - Behavioural Driven Development (Given, When, Then)
         RestAssured.given()
