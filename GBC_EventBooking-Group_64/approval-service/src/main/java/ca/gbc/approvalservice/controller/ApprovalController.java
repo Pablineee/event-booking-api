@@ -26,6 +26,12 @@ public class ApprovalController {
         return approvalService.getAllApprovals();
     }
 
+    @PostMapping("/process")
+    public ResponseEntity<ApprovalResponse> processApproval(@RequestBody ApprovalRequest approvalRequest) {
+        ApprovalResponse processedApproval = approvalService.processApprovalRequest(approvalRequest);
+        return ResponseEntity.ok(processedApproval);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ApprovalResponse> createApproval(@RequestBody ApprovalRequest approvalRequest) {

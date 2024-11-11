@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record ApprovalResponse(
         Long id,
-        String eventId,
+        EventResponse event,
         Long staffId,
         String status
 ) {
