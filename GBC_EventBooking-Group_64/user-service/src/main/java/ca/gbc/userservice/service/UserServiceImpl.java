@@ -48,8 +48,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isStudent(Long userId) {
         return userRepository.findById(userId)
-                .map(user -> "student".equalsIgnoreCase(user.getRole()))
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .map(user -> "student".equalsIgnoreCase(user.getUserType()))
+                .orElseThrow(() -> new RuntimeException("User with ID " + userId + " not found"));
+    }
+
+    @Override
+    public boolean isStaff(Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> "staff".equalsIgnoreCase(user.getUserType()))
+                .orElseThrow(() -> new RuntimeException("User with ID " + userId + " not found"));
     }
 
     @Override

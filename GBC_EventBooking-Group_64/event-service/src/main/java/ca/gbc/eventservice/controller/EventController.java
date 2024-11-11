@@ -26,6 +26,12 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{eventId}")
+    public EventResponse getEvent(@PathVariable String eventId) {
+        return eventService.getEvent(eventId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<EventResponse> createEvent(@RequestBody EventRequest eventRequest) {
@@ -39,6 +45,12 @@ public class EventController {
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(createdEvent);
+    }
+
+    @PutMapping("/status/{eventId}/{status}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateEventStatus(@PathVariable("eventId") String eventId, @PathVariable("status") String status) {
+        eventService.updateEventStatus(eventId, status);
     }
 
     @PutMapping("/{eventId}")

@@ -58,6 +58,22 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public EventResponse getEvent(String eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event with ID " + eventId + " not found"));
+
+        return EventResponse.builder()
+                .id(event.getId())
+                .eventName(event.getEventName())
+                .bookingId(event.getBookingId())
+                .organizerId(event.getOrganizerId())
+                .eventType(event.getEventType())
+                .expectedAttendees(event.getExpectedAttendees())
+                .status(event.getStatus())
+                .build();
+    }
+
+    @Override
     public List<EventResponse> getAllEvents() {
         List<Event> events = eventRepository.findAll();
 
@@ -105,5 +121,14 @@ public class EventServiceImpl implements EventService {
         log.debug("Deleting a event with ID {}", id);
         eventRepository.deleteById(id);
 
+    }
+
+    @Override
+    public void updateEventStatus(String eventId, String status) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event with ID " + eventId + " not found"));
+
+        event.setStatus(status);
+        eventRepository.save(event);
     }
 }

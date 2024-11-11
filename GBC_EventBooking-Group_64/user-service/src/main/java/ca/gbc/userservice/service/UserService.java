@@ -9,6 +9,7 @@ public interface UserService {
     List<UserResponse> getAllUsers();
     UserResponse getUser(String userId);
     boolean isStudent(Long userId);
+    boolean isStaff(Long userId);
     UserResponse createUser(UserRequest userRequest);
     String updateUser(String userId, UserRequest userRequest);
     void deleteUser(String userId);

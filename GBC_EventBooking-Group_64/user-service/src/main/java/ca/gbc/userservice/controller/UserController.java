@@ -36,6 +36,11 @@ public class UserController {
         return userService.isStudent(userId);
     }
 
+    @GetMapping("/is-staff/{userId}")
+    public boolean isStaff(@PathVariable Long userId) {
+        return userService.isStaff(userId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
