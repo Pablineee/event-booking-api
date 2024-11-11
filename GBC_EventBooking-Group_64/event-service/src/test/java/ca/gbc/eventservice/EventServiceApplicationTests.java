@@ -47,6 +47,11 @@ class EventServiceApplicationTests {
                 }
         """;
 
+        // Mock a call to user-service
+        UserClientStub.stubUserCall("001", 5);
+
+
+
         // BDD - Behavioural Driven Development (Given, When, Then)
         // Rest Assured is used to perform HTTP requests and verify responses.
         // This test performs a POST request to the /api/product endpoint to create a new product.
