@@ -152,9 +152,9 @@ services:
       - ./init/postgres/approval/init.sql:/docker-entrypoint-initdb.d/approval-init.sql
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U admin -h localhost" ]
-      interval: 3s
-      timeout: 3s
-      retries: 3
+      interval: 10s
+      timeout: 15s
+      retries: 10
     networks:
       - spring
 
