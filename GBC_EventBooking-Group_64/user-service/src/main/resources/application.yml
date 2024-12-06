@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://postgres-event-booking:5432/user-service
+    url: jdbc:postgresql://postgres-event-booking-89:5432/user-service
     username: admin
     password: password
   flyway:
