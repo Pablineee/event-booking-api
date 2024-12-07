@@ -9,107 +9,148 @@
 version: '3.9'
 
 services:
-  api-gateway-89:
+  keycloak:
+    container_name: keycloak
+    hostname: keycloak
+    image: quay.io/keycloak/keycloak:24.0.1
+    command: [ "start-dev",  "--import-realm" ]
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres-keycloak
+      DB_DATABASE: keycloak
+      DB_USER: admin
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+      ROOT_LOGLEVEL: DEBUG
+      JBOSS_LOG_MANAGER_ROOT_LOGGER: DEBUG, stdout, FILE
+      KEYCLOAK_IMPORT: ./realms/event-booking-realm.json
+      KC_HTTP_PORT: 8082
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./realms/event-booking-realm.json:/opt/keycloak/data/import/event-booking-realm.json
+    depends_on:
+      - postgres-keycloak
+    networks:
+      - spring
+
+  postgres-keycloak:
+    image: postgres
+    ports:
+      - "5431:5432"
+    container_name: postgres-keycloak
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/data/postgres
+    volumes:
+      - ./data/keycloak:/var/lib/postgresql/data
+    networks:
+      - spring
+
+  api-gateway:
     image: api-gateway
     ports:
       - "9000:9000"
     build:
       context: ./api-gateway
       dockerfile: ./Dockerfile
-    container_name: api-gateway-89
+    container_name: api-gateway
     environment:
       SPRING_PROFILES_ACTIVE: docker
     networks:
       - spring
 
-  room-service-89:
+  room-service:
     image: room-service
     ports:
       - "9001:8080"
     build:
       context: ./room-service
       dockerfile: ./Dockerfile
-    container_name: room-service-89
+    container_name: room-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      DATABASE_URL: jdbc:postgresql://postgres-event-booking-89:5432/room-service
+      DATABASE_URL: jdbc:postgresql://postgres-event-booking:5432/room-service
       DATABASE_USERNAME: admin
       DATABASE_PASSWORD: password
     depends_on:
-      postgres-event-booking-89:
+      postgres-event-booking:
         condition: service_healthy
     networks:
       - spring
 
-  booking-service-89:
+  booking-service:
     image: booking-service
     ports:
       - "9002:8080"
     build:
       context: ./booking-service
       dockerfile: ./Dockerfile
-    container_name: booking-service-89
+    container_name: booking-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - mongodb-event-booking-89
+      - mongodb-event-booking
     networks:
       - spring
 
-  user-service-89:
+  user-service:
     image: user-service
     ports:
       - "9003:8080"
     build:
       context: ./user-service
       dockerfile: ./Dockerfile
-    container_name: user-service-89
+    container_name: user-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      DATABASE_URL: jdbc:postgresql://postgres-event-booking-89:5432/user-service
+      DATABASE_URL: jdbc:postgresql://postgres-event-booking:5432/user-service
       DATABASE_USERNAME: admin
       DATABASE_PASSWORD: password
     depends_on:
-      postgres-event-booking-89:
+      postgres-event-booking:
         condition: service_healthy
     networks:
       - spring
 
-  event-service-89:
+  event-service:
     image: event-service
     ports:
       - "9004:8080"
     build:
       context: ./event-service
       dockerfile: ./Dockerfile
-    container_name: event-service-89
+    container_name: event-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - mongodb-event-booking-89
+      - mongodb-event-booking
     networks:
       - spring
 
-  approval-service-89:
+  approval-service:
     image: approval-service
     ports:
       - "9005:8080"
     build:
       context: ./approval-service
       dockerfile: ./Dockerfile
-    container_name: approval-service-89
+    container_name: approval-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      DATABASE_URL: jdbc:postgresql://postgres-event-booking-89:5432/approval-service
+      DATABASE_URL: jdbc:postgresql://postgres-event-booking:5432/approval-service
       DATABASE_USERNAME: admin
       DATABASE_PASSWORD: password
     depends_on:
-      postgres-event-booking-89:
+      postgres-event-booking:
         condition: service_healthy
     networks:
       - spring
 
-  mongodb-event-booking-89:
+  mongodb-event-booking:
     image: mongo
     ports:
       - "27019:27017"
@@ -119,29 +160,29 @@ services:
     volumes:
       - ./data/mongo:/data/db
       - ./init/mongo/docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
-    container_name: mongodb-event-booking-89
+    container_name: mongodb-event-booking
     networks:
       - spring
 
-  mongo-express-event-booking-89:
+  mongo-express-event-booking:
     image: mongo-express
     ports:
       - "8081:8081"
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
       - ME_CONFIG_MONGODB_ADMINPASSWORD=password
-      - ME_CONFIG_MONGODB_SERVER=mongodb-event-booking-89
-    container_name: mongo-express-event-booking-89
+      - ME_CONFIG_MONGODB_SERVER=mongodb-event-booking
+    container_name: mongo-express-event-booking
     depends_on:
-      - mongodb-event-booking-89
+      - mongodb-event-booking
     networks:
       - spring
 
-  postgres-event-booking-89:
+  postgres-event-booking:
     image: postgres
     ports:
       - "5432:5432"
-    container_name: postgres-event-booking-89
+    container_name: postgres-event-booking
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
@@ -153,16 +194,16 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U admin -h localhost" ]
       interval: 10s
-      timeout: 15s
+      timeout: 10s
       retries: 10
     networks:
       - spring
 
-  pgadmin-event-booking-89:
+  pgadmin-event-booking:
     image: dpage/pgadmin4
     ports:
       - "8889:80"
-    container_name: pgadmin-event-booking-89
+    container_name: pgadmin-event-booking
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.ca
       - PGADMIN_DEFAULT_PASSWORD=password
