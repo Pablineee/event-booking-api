@@ -28,19 +28,12 @@ public class SecurityConfig {
         log.info("Initializing Security Filter Chain...");
 
         return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)                   // Disable CSRF protection
-
-
-                //.authorizeHttpRequests( authorize -> authorize         // All requests temporarily permitted
-                //        .anyRequest().permitAll())                     // Must comment the code below
-
-
-                .authorizeHttpRequests( authorize -> authorize
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
+                .authorizeRequests(authorize -> authorize
                         .requestMatchers(noAuthResourcesUris)
-                        .permitAll()
-                        .anyRequest().authenticated())                   // All requests require authentication
-                .oauth2ResourceServer( oauth2 -> oauth2
-                        .jwt(Customizer.withDefaults()))
+                        .permitAll() // Allow unauthenticated access to specified paths
+                        .anyRequest().authenticated()) // All other requests require authentication
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();
     }
 
