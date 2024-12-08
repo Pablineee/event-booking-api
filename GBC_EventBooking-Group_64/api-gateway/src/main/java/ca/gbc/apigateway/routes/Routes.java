@@ -37,7 +37,7 @@ public class Routes {
         log.info("Initializing room-service route with URL: {}", roomServiceUrl);
 
         return GatewayRouterFunctions.route("room_service")
-                .route(RequestPredicates.path("/api/room"), request -> {
+                .route(RequestPredicates.path("/api/room/**"), request -> {
                     log.info("Received request for room-service: {}", request.uri());
 
                     try {
@@ -53,13 +53,14 @@ public class Routes {
                 .build();
     }
 
+
     @Bean
     public RouterFunction<ServerResponse> bookingServiceRoute() {
 
         log.info("Initializing booking-service route with URL: {}", bookingServiceUrl);
 
         return GatewayRouterFunctions.route("booking_service")
-                .route(RequestPredicates.path("/api/booking"), request -> {
+                .route(RequestPredicates.path("/api/booking/**"), request -> {
                     log.info("Received request for booking-service: {}", request.uri());
 
                     try {
@@ -81,7 +82,7 @@ public class Routes {
         log.info("Initializing user-service route with URL: {}", userServiceUrl);
 
         return GatewayRouterFunctions.route("user_service")
-                .route(RequestPredicates.path("/api/user"), request -> {
+                .route(RequestPredicates.path("/api/user/**"), request -> {
                     log.info("Received request for user-service: {}", request.uri());
 
                     try {
@@ -103,7 +104,7 @@ public class Routes {
         log.info("Initializing event-service route with URL: {}", eventServiceUrl);
 
         return GatewayRouterFunctions.route("event_service")
-                .route(RequestPredicates.path("/api/event"), request -> {
+                .route(RequestPredicates.path("/api/event/**"), request -> {
                     log.info("Received request for event-service: {}", request.uri());
 
                     try {
@@ -125,7 +126,7 @@ public class Routes {
         log.info("Initializing approval-service route with URL: {}", approvalServiceUrl);
 
         return GatewayRouterFunctions.route("approval_service")
-                .route(RequestPredicates.path("/api/approval"), request -> {
+                .route(RequestPredicates.path("/api/approval/**"), request -> {
                     log.info("Received request for approval-service: {}", request.uri());
 
                     try {
@@ -141,53 +142,53 @@ public class Routes {
                 .build();
     }
 
-//    @Bean
-//    public RouterFunction<ServerResponse> roomServiceSwaggerRoute() {
-//
-//        return GatewayRouterFunctions.route("room_service_swagger")
-//                .route(RequestPredicates.path("/aggregate/room-service/v3/api-docs"),
-//                        HandlerFunctions.http("http://localhost:9001"))
-//                .filter(setPath("/api-docs"))
-//                .build();
-//    }
-//
-//    @Bean
-//    public RouterFunction<ServerResponse> bookingServiceSwaggerRoute() {
-//
-//        return GatewayRouterFunctions.route("booking_service_swagger")
-//                .route(RequestPredicates.path("/aggregate/booking-service/v3/api-docs"),
-//                        HandlerFunctions.http("http://localhost:9002"))
-//                .filter(setPath("/api-docs"))
-//                .build();
-//    }
-//
-//    @Bean
-//    public RouterFunction<ServerResponse> userServiceSwaggerRoute() {
-//
-//        return GatewayRouterFunctions.route("user_service_swagger")
-//                .route(RequestPredicates.path("/aggregate/user-service/v3/api-docs"),
-//                        HandlerFunctions.http("http://localhost:9003"))
-//                .filter(setPath("/api-docs"))
-//                .build();
-//    }
-//
-//    @Bean
-//    public RouterFunction<ServerResponse> eventServiceSwaggerRoute() {
-//
-//        return GatewayRouterFunctions.route("event_service_swagger")
-//                .route(RequestPredicates.path("/aggregate/event-service/v3/api-docs"),
-//                        HandlerFunctions.http("http://localhost:9004"))
-//                .filter(setPath("/api-docs"))
-//                .build();
-//    }
-//
-//    @Bean
-//    public RouterFunction<ServerResponse> approvalServiceSwaggerRoute() {
-//
-//        return GatewayRouterFunctions.route("approval_service_swagger")
-//                .route(RequestPredicates.path("/aggregate/approval-service/v3/api-docs"),
-//                        HandlerFunctions.http("http://localhost:9005"))
-//                .filter(setPath("/api-docs"))
-//                .build();
-//    }
+    @Bean
+    public RouterFunction<ServerResponse> roomServiceSwaggerRoute() {
+
+        return GatewayRouterFunctions.route("room_service_swagger")
+                .route(RequestPredicates.path("/aggregate/room-service/v3/api-docs"),
+                        HandlerFunctions.http("http://localhost:9001"))
+                .filter(setPath("/api-docs"))
+                .build();
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> bookingServiceSwaggerRoute() {
+
+        return GatewayRouterFunctions.route("booking_service_swagger")
+                .route(RequestPredicates.path("/aggregate/booking-service/v3/api-docs"),
+                        HandlerFunctions.http("http://localhost:9002"))
+                .filter(setPath("/api-docs"))
+                .build();
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> userServiceSwaggerRoute() {
+
+        return GatewayRouterFunctions.route("user_service_swagger")
+                .route(RequestPredicates.path("/aggregate/user-service/v3/api-docs"),
+                        HandlerFunctions.http("http://localhost:9003"))
+                .filter(setPath("/api-docs"))
+                .build();
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> eventServiceSwaggerRoute() {
+
+        return GatewayRouterFunctions.route("event_service_swagger")
+                .route(RequestPredicates.path("/aggregate/event-service/v3/api-docs"),
+                        HandlerFunctions.http("http://localhost:9004"))
+                .filter(setPath("/api-docs"))
+                .build();
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> approvalServiceSwaggerRoute() {
+
+        return GatewayRouterFunctions.route("approval_service_swagger")
+                .route(RequestPredicates.path("/aggregate/approval-service/v3/api-docs"),
+                        HandlerFunctions.http("http://localhost:9005"))
+                .filter(setPath("/api-docs"))
+                .build();
+    }
 }
