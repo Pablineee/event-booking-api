@@ -1,4 +1,3 @@
-# GBC Event Booking - Group 64
+# Spring Boot Event Booking API
 
-### Simon Kriksciunas - 100912566
-### Pablo Arango Gomez - 101153741
+### Developed by Simon Kriksciunas and Pablo Arango-Gomez
